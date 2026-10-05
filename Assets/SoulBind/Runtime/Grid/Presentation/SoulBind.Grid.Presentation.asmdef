@@ -2,7 +2,8 @@
     "name": "SoulBind.Grid.Presentation",
     "rootNamespace": "SoulBind.Grid.Presentation",
     "references": [
-        "SoulBind.Grid"
+        "SoulBind.Grid",
+        "SoulBind.Turn"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

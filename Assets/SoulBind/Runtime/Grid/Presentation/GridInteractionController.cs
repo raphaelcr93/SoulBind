@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SoulBind.Grid;
+using SoulBind.Turn;
 
 namespace SoulBind.Grid.Presentation
 {
@@ -14,6 +15,7 @@ namespace SoulBind.Grid.Presentation
         [SerializeField] private Color selectedColor = Color.yellow;
         [SerializeField] private Color pathColor = Color.cyan;
         [SerializeField] private float moveDurationPerTile = 0.15f;
+        [SerializeField] private int actionPointsPerTurn = 3;
 
         #endregion
 
@@ -24,6 +26,7 @@ namespace SoulBind.Grid.Presentation
         private IGridPathfinder pathfinder = new DijkstraGridPathfinder();
         private Transform activeUnit;
         private bool isMoving;
+        private TurnState turnState = new TurnState();
 
         #endregion
 
@@ -34,6 +37,7 @@ namespace SoulBind.Grid.Presentation
             if (gridView == null) gridView = GetComponent<GridView>();
             if (inputCamera == null) inputCamera = Camera.main;
             CreatePrototypeUnit();
+            turnState.Begin(0, actionPointsPerTurn);
         }
 
         private void Update()
@@ -54,6 +58,12 @@ namespace SoulBind.Grid.Presentation
 
             ClearPreview();
             highlightedPath.AddRange(pathfinder.FindPath(gridView.Map, selectedPosition.Value, position));
+            if (highlightedPath.Count < 2 || !turnState.TrySpend(highlightedPath.Count - 1))
+            {
+                highlightedPath.Clear();
+                selectedPosition = null;
+                return;
+            }
             foreach (var pathPosition in highlightedPath)
                 gridView.GetView(pathPosition)?.SetHighlighted(true, pathColor);
             if (highlightedPath.Count > 1) StartCoroutine(MoveUnit(highlightedPath));
@@ -93,6 +103,8 @@ namespace SoulBind.Grid.Presentation
                 }
             }
             ClearPreview();
+            turnState.End();
+            turnState.Begin(0, actionPointsPerTurn);
             isMoving = false;
         }
 
