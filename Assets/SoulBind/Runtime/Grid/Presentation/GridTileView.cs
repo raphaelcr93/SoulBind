@@ -10,6 +10,7 @@ namespace SoulBind.Grid.Presentation
 
         private Renderer tileRenderer;
         private GridTile tile;
+        private Color baseColor = Color.white;
 
         #endregion
 
@@ -34,7 +35,14 @@ namespace SoulBind.Grid.Presentation
         public void Refresh()
         {
             if (tile == null || tileRenderer == null) return;
-            tileRenderer.material.color = tile.IsWalkable ? Color.white : Color.gray;
+            baseColor = tile.IsWalkable ? Color.white : Color.gray;
+            tileRenderer.material.color = baseColor;
+        }
+
+        public void SetHighlighted(bool highlighted, Color highlightColor)
+        {
+            if (tileRenderer == null) return;
+            tileRenderer.material.color = highlighted ? highlightColor : baseColor;
         }
 
         #endregion

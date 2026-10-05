@@ -27,6 +27,13 @@ namespace SoulBind.Grid.Presentation
 
         public GridMap Map => map;
 
+        public GridTileView GetView(GridPosition position)
+        {
+            if (map == null || !map.Contains(position)) return null;
+            var index = position.X * height + position.Y;
+            return index >= 0 && index < tileViews.Count ? tileViews[index] : null;
+        }
+
         #endregion
 
         #region Lifecycle
