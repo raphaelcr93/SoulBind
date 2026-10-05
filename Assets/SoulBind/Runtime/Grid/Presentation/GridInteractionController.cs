@@ -13,6 +13,7 @@ namespace SoulBind.Grid.Presentation
         [SerializeField] private Camera inputCamera;
         [SerializeField] private Color selectedColor = Color.yellow;
         [SerializeField] private Color pathColor = Color.cyan;
+        [SerializeField] private float moveDurationPerTile = 0.15f;
 
         #endregion
 
@@ -21,6 +22,8 @@ namespace SoulBind.Grid.Presentation
         private readonly List<GridPosition> highlightedPath = new List<GridPosition>();
         private GridPosition? selectedPosition;
         private IGridPathfinder pathfinder = new DijkstraGridPathfinder();
+        private Transform activeUnit;
+        private bool isMoving;
 
         #endregion
 
@@ -30,11 +33,12 @@ namespace SoulBind.Grid.Presentation
         {
             if (gridView == null) gridView = GetComponent<GridView>();
             if (inputCamera == null) inputCamera = Camera.main;
+            CreatePrototypeUnit();
         }
 
         private void Update()
         {
-            if (!Input.GetMouseButtonDown(0) || gridView == null || gridView.Map == null) return;
+            if (isMoving || !Input.GetMouseButtonDown(0) || gridView == null || gridView.Map == null) return;
             var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out var hit)) return;
             var local = gridView.transform.InverseTransformPoint(hit.point);
@@ -52,6 +56,7 @@ namespace SoulBind.Grid.Presentation
             highlightedPath.AddRange(pathfinder.FindPath(gridView.Map, selectedPosition.Value, position));
             foreach (var pathPosition in highlightedPath)
                 gridView.GetView(pathPosition)?.SetHighlighted(true, pathColor);
+            if (highlightedPath.Count > 1) StartCoroutine(MoveUnit(highlightedPath));
             selectedPosition = null;
         }
 
@@ -64,6 +69,31 @@ namespace SoulBind.Grid.Presentation
             foreach (var position in highlightedPath)
                 gridView.GetView(position)?.SetHighlighted(false, Color.clear);
             highlightedPath.Clear();
+        }
+
+        private void CreatePrototypeUnit()
+        {
+            var unitObject = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            unitObject.name = "Prototype Unit";
+            unitObject.transform.SetParent(transform, false);
+            unitObject.transform.localPosition = new Vector3(0f, 0.6f, 0f);
+            activeUnit = unitObject.transform;
+        }
+
+        private System.Collections.IEnumerator MoveUnit(IReadOnlyList<GridPosition> path)
+        {
+            isMoving = true;
+            foreach (var position in path)
+            {
+                var destination = gridView.transform.TransformPoint(new Vector3(position.X, 0.6f, position.Y));
+                while (Vector3.Distance(activeUnit.position, destination) > 0.01f)
+                {
+                    activeUnit.position = Vector3.MoveTowards(activeUnit.position, destination, Time.deltaTime / moveDurationPerTile);
+                    yield return null;
+                }
+            }
+            ClearPreview();
+            isMoving = false;
         }
 
         #endregion
