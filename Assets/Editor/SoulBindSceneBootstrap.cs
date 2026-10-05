@@ -17,6 +17,7 @@ namespace SoulBind.Editor
             var grid = new GameObject("Grid");
             grid.AddComponent<GridView>();
             var interaction = grid.AddComponent<GridInteractionController>();
+            grid.AddComponent<GridPrototypeHud>();
 
             var cameraObject = new GameObject("Main Camera");
             cameraObject.tag = "MainCamera";

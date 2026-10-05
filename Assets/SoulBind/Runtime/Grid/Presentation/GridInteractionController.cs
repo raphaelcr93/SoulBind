@@ -30,6 +30,11 @@ namespace SoulBind.Grid.Presentation
         private UnitState playerState;
         private UnitState enemyState;
         private readonly CombatService combatService = new CombatService();
+
+        public int ActionPoints => turnState.ActionPoints;
+        public int PlayerHealth => playerState == null ? 0 : playerState.Health;
+        public int EnemyHealth => enemyState == null ? 0 : enemyState.Health;
+        public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
         private bool isMoving;
         private TurnState turnState = new TurnState();
 
