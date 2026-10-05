@@ -80,7 +80,10 @@ namespace SoulBind.Grid.Presentation
                 if (combatService.TryAttack(playerState, enemyState, turnState))
                 {
                     enemyUnit.GetComponent<Renderer>().material.color = Color.red;
-                    if (enemyState.IsDefeated) Destroy(enemyUnit.gameObject);
+                    if (enemyState.IsDefeated)
+                        Destroy(enemyUnit.gameObject);
+                    else
+                        playerState.ReceiveDamage(enemyState.Attack);
                 }
                 selectedPosition = null;
                 ClearPreview();
