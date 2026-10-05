@@ -3,7 +3,8 @@
     "rootNamespace": "SoulBind.Grid.Presentation",
     "references": [
         "SoulBind.Grid",
-        "SoulBind.Turn"
+        "SoulBind.Turn",
+        "SoulBind.Units"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

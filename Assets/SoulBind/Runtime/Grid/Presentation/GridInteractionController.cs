@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SoulBind.Grid;
 using SoulBind.Turn;
+using SoulBind.Units;
 
 namespace SoulBind.Grid.Presentation
 {
@@ -25,6 +26,10 @@ namespace SoulBind.Grid.Presentation
         private GridPosition? selectedPosition;
         private IGridPathfinder pathfinder = new DijkstraGridPathfinder();
         private Transform activeUnit;
+        private Transform enemyUnit;
+        private UnitState playerState;
+        private UnitState enemyState;
+        private readonly CombatService combatService = new CombatService();
         private bool isMoving;
         private TurnState turnState = new TurnState();
 
@@ -37,6 +42,9 @@ namespace SoulBind.Grid.Presentation
             if (gridView == null) gridView = GetComponent<GridView>();
             if (inputCamera == null) inputCamera = Camera.main;
             CreatePrototypeUnit();
+            CreatePrototypeEnemy();
+            playerState = new UnitState("player", "Player", 3, 10);
+            enemyState = new UnitState("enemy", "Enemy", 2, 6);
             turnState.Begin(0, actionPointsPerTurn);
         }
 
@@ -48,6 +56,18 @@ namespace SoulBind.Grid.Presentation
             var local = gridView.transform.InverseTransformPoint(hit.point);
             var position = new GridPosition(Mathf.RoundToInt(local.x), Mathf.RoundToInt(local.z));
             if (!gridView.Map.Contains(position)) return;
+
+            if (position == new GridPosition(5, 5) && enemyUnit != null)
+            {
+                if (combatService.TryAttack(playerState, enemyState, turnState))
+                {
+                    enemyUnit.GetComponent<Renderer>().material.color = Color.red;
+                    if (enemyState.IsDefeated) Destroy(enemyUnit.gameObject);
+                }
+                selectedPosition = null;
+                ClearPreview();
+                return;
+            }
 
             if (!selectedPosition.HasValue)
             {
@@ -88,6 +108,16 @@ namespace SoulBind.Grid.Presentation
             unitObject.transform.SetParent(transform, false);
             unitObject.transform.localPosition = new Vector3(0f, 0.6f, 0f);
             activeUnit = unitObject.transform;
+        }
+
+        private void CreatePrototypeEnemy()
+        {
+            var enemyObject = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            enemyObject.name = "Prototype Enemy";
+            enemyObject.transform.SetParent(transform, false);
+            enemyObject.transform.localPosition = new Vector3(5f, 0.6f, 5f);
+            enemyObject.GetComponent<Renderer>().material.color = Color.magenta;
+            enemyUnit = enemyObject.transform;
         }
 
         private System.Collections.IEnumerator MoveUnit(IReadOnlyList<GridPosition> path)
