@@ -17,6 +17,10 @@ namespace SoulBind.Grid.Presentation
         [Min(1)] [SerializeField] private int height = 8;
         [Min(0.1f)] [SerializeField] private float tileSize = 1f;
         [SerializeField] private bool buildOnAwake = true;
+        [SerializeField] private Vector2Int[] blockedTiles =
+        {
+            new Vector2Int(3, 3), new Vector2Int(3, 4), new Vector2Int(4, 3)
+        };
 
         #endregion
 
@@ -52,6 +56,13 @@ namespace SoulBind.Grid.Presentation
         {
             Clear();
             map = new GridMap(width, height, new GridTileDefinition("default", 1, true));
+            var blockedDefinition = new GridTileDefinition("blocked", 1, false);
+
+            foreach (var blockedPosition in blockedTiles)
+            {
+                var position = new GridPosition(blockedPosition.x, blockedPosition.y);
+                if (map.Contains(position)) map.Get(position).ChangeDefinition(blockedDefinition);
+            }
 
             for (var x = 0; x < width; x++)
             for (var y = 0; y < height; y++)
