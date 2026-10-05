@@ -27,7 +27,7 @@ namespace SoulBind.Grid.Presentation
             GUILayout.Label($"Player Health: {controller.PlayerHealth}");
             GUILayout.Label($"Enemy Health: {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}");
             GUILayout.Label($"Cards in Hand: {controller.CardsInHand}");
-            GUILayout.Label("Click to move/attack. Press C to play a card.");
+            GUILayout.Label(controller.EnemyDefeated ? "Victory! Press R to restart." : "Click to move/attack. Press C for a card. Press R to restart.");
             GUILayout.EndArea();
         }
 

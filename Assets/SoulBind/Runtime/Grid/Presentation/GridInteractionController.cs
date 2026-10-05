@@ -62,6 +62,11 @@ namespace SoulBind.Grid.Presentation
         private void Update()
         {
             if (isMoving || gridView == null || gridView.Map == null) return;
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                ResetPrototype();
+                return;
+            }
             if (Input.GetKeyDown(KeyCode.C)) cardHand.TryPlay(0, turnState);
             if (!Input.GetMouseButtonDown(0)) return;
             var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
@@ -131,6 +136,21 @@ namespace SoulBind.Grid.Presentation
             enemyObject.transform.localPosition = new Vector3(5f, 0.6f, 5f);
             enemyObject.GetComponent<Renderer>().material.color = Color.magenta;
             enemyUnit = enemyObject.transform;
+        }
+
+        private void ResetPrototype()
+        {
+            if (enemyUnit == null)
+            {
+                CreatePrototypeEnemy();
+            }
+            enemyUnit.gameObject.SetActive(true);
+            enemyUnit.GetComponent<Renderer>().material.color = Color.magenta;
+            playerState.Reset();
+            enemyState.Reset();
+            turnState.Begin(0, actionPointsPerTurn);
+            selectedPosition = null;
+            ClearPreview();
         }
 
         private System.Collections.IEnumerator MoveUnit(IReadOnlyList<GridPosition> path)

@@ -41,6 +41,8 @@ namespace SoulBind.Units
             return applied;
         }
 
+        public void Reset() => Health = MaxHealth;
+
         #endregion
     }
 }
