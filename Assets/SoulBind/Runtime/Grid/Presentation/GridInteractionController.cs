@@ -3,6 +3,7 @@ using UnityEngine;
 using SoulBind.Grid;
 using SoulBind.Turn;
 using SoulBind.Units;
+using SoulBind.Cards;
 
 namespace SoulBind.Grid.Presentation
 {
@@ -30,11 +31,13 @@ namespace SoulBind.Grid.Presentation
         private UnitState playerState;
         private UnitState enemyState;
         private readonly CombatService combatService = new CombatService();
+        private readonly CardHand cardHand = new CardHand();
 
         public int ActionPoints => turnState.ActionPoints;
         public int PlayerHealth => playerState == null ? 0 : playerState.Health;
         public int EnemyHealth => enemyState == null ? 0 : enemyState.Health;
         public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
+        public int CardsInHand => cardHand.Cards.Count;
         private bool isMoving;
         private TurnState turnState = new TurnState();
 
@@ -51,11 +54,16 @@ namespace SoulBind.Grid.Presentation
             playerState = new UnitState("player", "Player", 3, 10);
             enemyState = new UnitState("enemy", "Enemy", 2, 6);
             turnState.Begin(0, actionPointsPerTurn);
+            cardHand.Add(new CardState("strike", "Strike", 1));
+            cardHand.Add(new CardState("guard", "Guard", 1));
+            cardHand.Add(new CardState("focus", "Focus", 1));
         }
 
         private void Update()
         {
-            if (isMoving || !Input.GetMouseButtonDown(0) || gridView == null || gridView.Map == null) return;
+            if (isMoving || gridView == null || gridView.Map == null) return;
+            if (Input.GetKeyDown(KeyCode.C)) cardHand.TryPlay(0, turnState);
+            if (!Input.GetMouseButtonDown(0)) return;
             var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out var hit)) return;
             var local = gridView.transform.InverseTransformPoint(hit.point);

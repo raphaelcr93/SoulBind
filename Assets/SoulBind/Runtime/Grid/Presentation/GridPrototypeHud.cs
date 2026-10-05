@@ -26,7 +26,8 @@ namespace SoulBind.Grid.Presentation
             GUILayout.Label($"Action Points: {controller.ActionPoints}");
             GUILayout.Label($"Player Health: {controller.PlayerHealth}");
             GUILayout.Label($"Enemy Health: {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}");
-            GUILayout.Label("Click a tile to select, then click to move. Click the enemy to attack.");
+            GUILayout.Label($"Cards in Hand: {controller.CardsInHand}");
+            GUILayout.Label("Click to move/attack. Press C to play a card.");
             GUILayout.EndArea();
         }
 

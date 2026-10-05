@@ -4,7 +4,8 @@
     "references": [
         "SoulBind.Grid",
         "SoulBind.Turn",
-        "SoulBind.Units"
+        "SoulBind.Units",
+        "SoulBind.Cards"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
