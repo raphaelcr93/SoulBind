@@ -38,6 +38,7 @@ namespace SoulBind.Grid.Presentation
         public int PlayerHealth => playerState == null ? 0 : playerState.Health;
         public int EnemyHealth => enemyState == null ? 0 : enemyState.Health;
         public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
+        public bool PlayerDefeated => playerState != null && playerState.IsDefeated;
         public int CardsInHand => cardHand.Cards.Count;
         private bool isMoving;
         private TurnState turnState = new TurnState();
@@ -68,6 +69,7 @@ namespace SoulBind.Grid.Presentation
                 ResetPrototype();
                 return;
             }
+            if (PlayerDefeated || EnemyDefeated) return;
             if (Input.GetKeyDown(KeyCode.C)) cardHand.TryPlay(0, turnState);
             if (!Input.GetMouseButtonDown(0)) return;
             var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
