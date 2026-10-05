@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace SoulBind.Grid;
+namespace SoulBind.Grid
+{
 
 public sealed class GridMap
 {
@@ -60,4 +61,5 @@ public sealed class GridMap
     }
 
     #endregion
+}
 }

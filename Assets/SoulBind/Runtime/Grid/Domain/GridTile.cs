@@ -1,4 +1,5 @@
-namespace SoulBind.Grid;
+namespace SoulBind.Grid
+{
 
 public sealed class GridTile
 {
@@ -38,4 +39,5 @@ public sealed class GridTile
     public void ClearOccupant() => OccupantId = null;
 
     #endregion
+}
 }

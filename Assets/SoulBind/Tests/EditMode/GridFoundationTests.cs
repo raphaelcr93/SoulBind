@@ -2,7 +2,8 @@ using System.Linq;
 using NUnit.Framework;
 using SoulBind.Grid;
 
-namespace SoulBind.Tests.Grid;
+namespace SoulBind.Tests.Grid
+{
 
 public sealed class GridFoundationTests
 {
@@ -62,4 +63,5 @@ public sealed class GridFoundationTests
     }
 
     #endregion
+}
 }

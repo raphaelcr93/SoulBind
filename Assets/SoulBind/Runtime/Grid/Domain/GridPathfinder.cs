@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
-namespace SoulBind.Grid;
+namespace SoulBind.Grid
+{
 
 public interface IGridPathfinder
 {
@@ -49,4 +50,5 @@ public sealed class DijkstraGridPathfinder : IGridPathfinder
     }
 
     #endregion
+}
 }

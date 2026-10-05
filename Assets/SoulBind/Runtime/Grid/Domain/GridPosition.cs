@@ -1,6 +1,7 @@
 using System;
 
-namespace SoulBind.Grid;
+namespace SoulBind.Grid
+{
 
 public readonly struct GridPosition : IEquatable<GridPosition>
 {
@@ -31,4 +32,5 @@ public readonly struct GridPosition : IEquatable<GridPosition>
     public override string ToString() => $"({X}, {Y})";
 
     #endregion
+}
 }

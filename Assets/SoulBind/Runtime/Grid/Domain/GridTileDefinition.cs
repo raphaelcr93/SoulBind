@@ -1,4 +1,5 @@
-namespace SoulBind.Grid;
+namespace SoulBind.Grid
+{
 
 public sealed class GridTileDefinition
 {
@@ -25,4 +26,5 @@ public sealed class GridTileDefinition
     }
 
     #endregion
+}
 }
