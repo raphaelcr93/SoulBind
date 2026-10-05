@@ -9,6 +9,8 @@ public interface IGridPathfinder
 
 public sealed class DijkstraGridPathfinder : IGridPathfinder
 {
+    #region Public API
+
     public IReadOnlyList<GridPosition> FindPath(GridMap map, GridPosition start, GridPosition goal)
     {
         if (map == null || !map.Contains(start) || !map.Contains(goal)) return System.Array.Empty<GridPosition>();
@@ -20,8 +22,11 @@ public sealed class DijkstraGridPathfinder : IGridPathfinder
 
         while (frontier.Count > 0)
         {
-            var current = frontier[0];
-            frontier.RemoveAt(0);
+            var currentIndex = 0;
+            for (var i = 1; i < frontier.Count; i++)
+                if (cost[frontier[i]] < cost[frontier[currentIndex]]) currentIndex = i;
+            var current = frontier[currentIndex];
+            frontier.RemoveAt(currentIndex);
             if (current == goal) break;
 
             foreach (var next in map.GetNeighbours(current))
@@ -42,4 +47,6 @@ public sealed class DijkstraGridPathfinder : IGridPathfinder
         path.Reverse();
         return path;
     }
+
+    #endregion
 }

@@ -2,9 +2,15 @@ namespace SoulBind.Grid;
 
 public sealed class GridTileDefinition
 {
+    #region Properties
+
     public string Id { get; }
     public int MovementCost { get; }
     public bool IsWalkable { get; }
+
+    #endregion
+
+    #region Construction
 
     public GridTileDefinition(string id, int movementCost, bool isWalkable)
     {
@@ -17,4 +23,6 @@ public sealed class GridTileDefinition
         MovementCost = movementCost;
         IsWalkable = isWalkable;
     }
+
+    #endregion
 }

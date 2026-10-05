@@ -5,10 +5,16 @@ namespace SoulBind.Grid;
 
 public sealed class GridMap
 {
+    #region Fields and Properties
+
     private readonly GridTile[,] tiles;
 
     public int Width { get; }
     public int Height { get; }
+
+    #endregion
+
+    #region Construction
 
     public GridMap(int width, int height, GridTileDefinition defaultDefinition)
     {
@@ -23,6 +29,10 @@ public sealed class GridMap
         for (var y = 0; y < height; y++)
             tiles[x, y] = new GridTile(new GridPosition(x, y), defaultDefinition);
     }
+
+    #endregion
+
+    #region Queries
 
     public bool Contains(GridPosition position) =>
         position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height;
@@ -48,4 +58,6 @@ public sealed class GridMap
             if (Contains(neighbour)) yield return neighbour;
         }
     }
+
+    #endregion
 }
