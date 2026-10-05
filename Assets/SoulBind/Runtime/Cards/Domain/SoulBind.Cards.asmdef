@@ -1,0 +1,14 @@
+{
+    "name": "SoulBind.Cards",
+    "rootNamespace": "SoulBind.Cards",
+    "references": ["SoulBind.Turn"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

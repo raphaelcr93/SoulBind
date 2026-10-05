@@ -1,0 +1,14 @@
+{
+    "name": "SoulBind.Cards.Tests",
+    "rootNamespace": "SoulBind.Tests.Cards",
+    "references": ["SoulBind.Cards", "SoulBind.Turn"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": ["nunit.framework.dll"],
+    "autoReferenced": false,
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
