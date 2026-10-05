@@ -18,6 +18,7 @@ namespace SoulBind.Grid.Presentation
         [SerializeField] private Color pathColor = Color.cyan;
         [SerializeField] private float moveDurationPerTile = 0.15f;
         [SerializeField] private int actionPointsPerTurn = 3;
+        [SerializeField] private int attackRange = 3;
 
         #endregion
 
@@ -77,7 +78,9 @@ namespace SoulBind.Grid.Presentation
 
             if (position == new GridPosition(5, 5) && enemyUnit != null)
             {
-                if (combatService.TryAttack(playerState, enemyState, turnState))
+                var playerGridPosition = new GridPosition(Mathf.RoundToInt(activeUnit.localPosition.x), Mathf.RoundToInt(activeUnit.localPosition.z));
+                var distance = Mathf.Abs(playerGridPosition.X - position.X) + Mathf.Abs(playerGridPosition.Y - position.Y);
+                if (distance <= attackRange && combatService.TryAttack(playerState, enemyState, turnState))
                 {
                     enemyUnit.GetComponent<Renderer>().material.color = Color.red;
                     if (enemyState.IsDefeated)
