@@ -1,0 +1,14 @@
+{
+    "name": "SoulBind.Units",
+    "rootNamespace": "SoulBind.Units",
+    "references": ["SoulBind.Turn"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
