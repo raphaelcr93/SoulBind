@@ -1,0 +1,16 @@
+{
+    "name": "SoulBind.Grid.Presentation",
+    "rootNamespace": "SoulBind.Grid.Presentation",
+    "references": [
+        "SoulBind.Grid"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
