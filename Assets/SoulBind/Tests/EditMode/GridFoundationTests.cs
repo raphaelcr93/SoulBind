@@ -62,6 +62,16 @@ public sealed class GridFoundationTests
         Assert.That(new DijkstraGridPathfinder().FindPath(map, new GridPosition(0, 0), new GridPosition(1, 0)), Is.Empty);
     }
 
+    [Test]
+    public void PathfinderRoutesAroundBlockedTile()
+    {
+        var map = new GridMap(3, 2, WalkableTile);
+        map.Get(new GridPosition(1, 0)).ChangeDefinition(new GridTileDefinition("wall", 1, false));
+        var path = new DijkstraGridPathfinder().FindPath(map, new GridPosition(0, 0), new GridPosition(2, 0));
+        Assert.That(path.Any(position => position == new GridPosition(1, 0)), Is.False);
+        Assert.That(path[path.Count - 1], Is.EqualTo(new GridPosition(2, 0)));
+    }
+
     #endregion
 }
 }
