@@ -70,7 +70,7 @@ namespace SoulBind.Grid.Presentation
                 return;
             }
             if (PlayerDefeated || EnemyDefeated) return;
-            if (Input.GetKeyDown(KeyCode.C)) cardHand.TryPlay(0, turnState);
+            if (Input.GetKeyDown(KeyCode.C) && cardHand.TryPlay(0, turnState)) EndTurnIfSpent();
             if (!Input.GetMouseButtonDown(0)) return;
             var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out var hit)) return;
@@ -89,6 +89,7 @@ namespace SoulBind.Grid.Presentation
                         Destroy(enemyUnit.gameObject);
                     else
                         playerState.ReceiveDamage(enemyState.Attack);
+                    EndTurnIfSpent();
                 }
                 selectedPosition = null;
                 ClearPreview();
@@ -174,9 +175,15 @@ namespace SoulBind.Grid.Presentation
                 }
             }
             ClearPreview();
+            EndTurnIfSpent();
+            isMoving = false;
+        }
+
+        private void EndTurnIfSpent()
+        {
+            if (turnState.ActionPoints > 0) return;
             turnState.End();
             turnState.Begin(0, actionPointsPerTurn);
-            isMoving = false;
         }
 
         #endregion
