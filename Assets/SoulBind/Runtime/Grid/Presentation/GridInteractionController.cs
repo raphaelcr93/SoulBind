@@ -73,6 +73,7 @@ namespace SoulBind.Grid.Presentation
             {
                 case 0:
                     enemyState.ReceiveDamage(2);
+                    if (!enemyState.IsDefeated) StartCoroutine(FlashEnemy());
                     LastActionMessage = enemyState.IsDefeated ? "Strike defeated the enemy!" : "Strike dealt 2 damage.";
                     if (enemyState.IsDefeated && enemyUnit != null) Destroy(enemyUnit.gameObject);
                     break;
@@ -135,7 +136,7 @@ namespace SoulBind.Grid.Presentation
                 var distance = Mathf.Abs(playerGridPosition.X - position.X) + Mathf.Abs(playerGridPosition.Y - position.Y);
                 if (distance <= attackRange && combatService.TryAttack(playerState, enemyState, turnState))
                 {
-                    TintEnemy(Color.red);
+                    StartCoroutine(FlashEnemy());
                     LastActionMessage = enemyState.IsDefeated ? "Enemy defeated!" : "Attack landed. The enemy counterattacks.";
                     if (enemyState.IsDefeated)
                         Destroy(enemyUnit.gameObject);
@@ -323,6 +324,14 @@ namespace SoulBind.Grid.Presentation
             if (enemyUnit == null) return;
             foreach (var renderer in enemyUnit.GetComponentsInChildren<Renderer>())
                 renderer.material.color = color;
+        }
+
+        private System.Collections.IEnumerator FlashEnemy()
+        {
+            TintEnemy(Color.red);
+            yield return new WaitForSeconds(0.18f);
+            if (enemyUnit != null && enemyUnit.gameObject.activeInHierarchy)
+                TintEnemy(Color.magenta);
         }
 
         #endregion
