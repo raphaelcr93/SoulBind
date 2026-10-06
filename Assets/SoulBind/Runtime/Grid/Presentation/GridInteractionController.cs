@@ -147,15 +147,15 @@ namespace SoulBind.Grid.Presentation
                 {
                     LastActionMessage = $"Target out of range ({distance}/{attackRange}).";
                 }
-                selectedPosition = null;
                 ClearPreview();
+                selectedPosition = null;
                 return;
             }
 
             if (!selectedPosition.HasValue)
             {
                 selectedPosition = position;
-                gridView.GetView(position).SetHighlighted(true, selectedColor);
+                gridView.GetView(position).SetSelected(true);
                 var playerPosition = new GridPosition(Mathf.RoundToInt(activeUnit.localPosition.x), Mathf.RoundToInt(activeUnit.localPosition.z));
                 if (position == playerPosition)
                 {
@@ -198,6 +198,8 @@ namespace SoulBind.Grid.Presentation
 
         private void ClearPreview()
         {
+            if (selectedPosition.HasValue)
+                gridView.GetView(selectedPosition.Value)?.SetSelected(false);
             foreach (var position in highlightedPath)
                 gridView.GetView(position)?.SetHighlighted(false, Color.clear);
             highlightedPath.Clear();
