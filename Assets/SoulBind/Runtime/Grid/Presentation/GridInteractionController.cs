@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using SoulBind.Grid;
 using SoulBind.Turn;
 using SoulBind.Units;
@@ -64,15 +65,15 @@ namespace SoulBind.Grid.Presentation
         private void Update()
         {
             if (isMoving || gridView == null || gridView.Map == null) return;
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
             {
                 ResetPrototype();
                 return;
             }
             if (PlayerDefeated || EnemyDefeated) return;
-            if (Input.GetKeyDown(KeyCode.C) && cardHand.TryPlay(0, turnState)) EndTurnIfSpent();
-            if (!Input.GetMouseButtonDown(0)) return;
-            var ray = inputCamera.ScreenPointToRay(Input.mousePosition);
+            if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame && cardHand.TryPlay(0, turnState)) EndTurnIfSpent();
+            if (Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame) return;
+            var ray = inputCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out var hit)) return;
             var local = gridView.transform.InverseTransformPoint(hit.point);
             var position = new GridPosition(Mathf.RoundToInt(local.x), Mathf.RoundToInt(local.z));

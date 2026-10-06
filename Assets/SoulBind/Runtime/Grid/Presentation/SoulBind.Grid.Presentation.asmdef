@@ -5,7 +5,8 @@
         "SoulBind.Grid",
         "SoulBind.Turn",
         "SoulBind.Units",
-        "SoulBind.Cards"
+        "SoulBind.Cards",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
