@@ -59,8 +59,11 @@ namespace SoulBind.Grid.Presentation
                 GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 18f, cardWidth - 24f, 28f), i == 0 ? "STRIKE" : i == 1 ? "GUARD" : "FOCUS", cardTitleStyle);
                 GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 64f, cardWidth - 24f, 64f), i == 0 ? "Deal damage to an enemy." : i == 1 ? "Prepare for the next hit." : "Restore tactical momentum.", cardBodyStyle);
                 GUI.Label(new Rect(cardRect.x + 12f, cardRect.yMax - 34f, cardWidth - 24f, 22f), "COST 1 AP");
+                var canPlayCard = controller.ActionPoints > 0 && !controller.PlayerDefeated && !controller.EnemyDefeated;
+                GUI.enabled = canPlayCard;
                 if (GUI.Button(new Rect(cardRect.x + 12f, cardRect.yMax - 62f, cardWidth - 24f, 24f), "PLAY CARD", cardButtonStyle))
                     controller.TryPlayCard(i);
+                GUI.enabled = true;
             }
         }
 
