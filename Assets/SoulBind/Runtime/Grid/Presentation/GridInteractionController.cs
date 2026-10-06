@@ -91,7 +91,7 @@ namespace SoulBind.Grid.Presentation
                 var distance = Mathf.Abs(playerGridPosition.X - position.X) + Mathf.Abs(playerGridPosition.Y - position.Y);
                 if (distance <= attackRange && combatService.TryAttack(playerState, enemyState, turnState))
                 {
-                    enemyUnit.GetComponent<Renderer>().material.color = Color.red;
+                    TintEnemy(Color.red);
                     if (enemyState.IsDefeated)
                         Destroy(enemyUnit.gameObject);
                     else
@@ -149,11 +149,23 @@ namespace SoulBind.Grid.Presentation
 
         private void CreatePrototypeEnemy()
         {
-            var enemyObject = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            enemyObject.name = "Prototype Enemy";
+            var enemyObject = new GameObject("Prototype Enemy");
             enemyObject.transform.SetParent(transform, false);
             enemyObject.transform.localPosition = new Vector3(5f, 0.6f, 5f);
-            enemyObject.GetComponent<Renderer>().material.color = Color.magenta;
+            var beholderPrefab = Resources.Load<GameObject>("SoulBindUnits/Beholder");
+            if (beholderPrefab != null)
+            {
+                var visual = Instantiate(beholderPrefab, enemyObject.transform);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                visual.transform.localScale = Vector3.one * 0.35f;
+            }
+            else
+            {
+                var fallback = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                fallback.transform.SetParent(enemyObject.transform, false);
+                fallback.GetComponent<Renderer>().material.color = Color.magenta;
+            }
             enemyUnit = enemyObject.transform;
         }
 
@@ -164,7 +176,7 @@ namespace SoulBind.Grid.Presentation
                 CreatePrototypeEnemy();
             }
             enemyUnit.gameObject.SetActive(true);
-            enemyUnit.GetComponent<Renderer>().material.color = Color.magenta;
+            TintEnemy(Color.magenta);
             playerState.Reset();
             enemyState.Reset();
             turnState.Begin(0, actionPointsPerTurn);
@@ -202,6 +214,13 @@ namespace SoulBind.Grid.Presentation
             pathArrow.positionCount = path.Count;
             for (var i = 0; i < path.Count; i++)
                 pathArrow.SetPosition(i, gridView.transform.TransformPoint(new Vector3(path[i].X, 0.16f, path[i].Y)));
+        }
+
+        private void TintEnemy(Color color)
+        {
+            if (enemyUnit == null) return;
+            foreach (var renderer in enemyUnit.GetComponentsInChildren<Renderer>())
+                renderer.material.color = color;
         }
 
         #endregion
