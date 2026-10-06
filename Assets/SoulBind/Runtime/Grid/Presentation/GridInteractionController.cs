@@ -45,6 +45,14 @@ namespace SoulBind.Grid.Presentation
         private bool isMoving;
         private TurnState turnState = new TurnState();
 
+        public bool TryPlayCard(int index)
+        {
+            if (PlayerDefeated || EnemyDefeated || isMoving) return false;
+            if (!cardHand.TryPlay(index, turnState)) return false;
+            EndTurnIfSpent();
+            return true;
+        }
+
         #endregion
 
         #region Lifecycle
@@ -77,7 +85,7 @@ namespace SoulBind.Grid.Presentation
                 return;
             }
             if (PlayerDefeated || EnemyDefeated) return;
-            if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame && cardHand.TryPlay(0, turnState)) EndTurnIfSpent();
+            if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame) TryPlayCard(0);
             if (Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame) return;
             var ray = inputCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out var hit)) return;
