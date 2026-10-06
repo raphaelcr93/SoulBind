@@ -27,7 +27,7 @@ namespace SoulBind.Grid.Presentation
             if (!controller.EnemyDefeated)
                 DrawUnitHealthBar(controller.EnemyTransform, controller.EnemyHealth, 6, new Color(1f, 0.25f, 0.35f));
             GUILayout.BeginArea(new Rect(18f, 18f, Screen.width - 36f, 92f), GUI.skin.box);
-            GUILayout.Label("SOUL BIND    |    TURN 1    |    PLAYER PHASE");
+            GUILayout.Label($"SOUL BIND    |    TURN {controller.Round}    |    PLAYER PHASE");
             GUILayout.Label($"AP  {controller.ActionPoints}/3     PLAYER HP  {controller.PlayerHealth}/10     ENEMY HP  {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}     HAND  {controller.CardsInHand}");
             var outcome = controller.EnemyDefeated ? "Victory! Press R to restart." : controller.PlayerDefeated ? "Defeat! Press R to restart." : "Click to move/attack. Press C for a card. Press R to restart.";
             GUILayout.Label(outcome);

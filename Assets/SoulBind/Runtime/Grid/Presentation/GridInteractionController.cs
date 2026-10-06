@@ -39,6 +39,7 @@ namespace SoulBind.Grid.Presentation
         private GameObject pathArrowHead;
 
         public int ActionPoints => turnState.ActionPoints;
+        public int Round => turnState.Round;
         public int PlayerHealth => playerState == null ? 0 : playerState.Health;
         public int EnemyHealth => enemyState == null ? 0 : enemyState.Health;
         public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
