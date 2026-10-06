@@ -34,6 +34,7 @@ namespace SoulBind.Grid.Presentation
         private UnitState enemyState;
         private readonly CombatService combatService = new CombatService();
         private readonly CardHand cardHand = new CardHand();
+        private LineRenderer pathArrow;
 
         public int ActionPoints => turnState.ActionPoints;
         public int PlayerHealth => playerState == null ? 0 : playerState.Health;
@@ -57,6 +58,11 @@ namespace SoulBind.Grid.Presentation
             playerState = new UnitState("player", "Player", 3, 10);
             enemyState = new UnitState("enemy", "Enemy", 2, 6);
             turnState.Begin(0, actionPointsPerTurn);
+            pathArrow = gameObject.AddComponent<LineRenderer>();
+            pathArrow.widthMultiplier = 0.08f;
+            pathArrow.material = new Material(Shader.Find("Sprites/Default"));
+            pathArrow.material.color = new Color(1f, 0.82f, 0.12f);
+            pathArrow.positionCount = 0;
             cardHand.Add(new CardState("strike", "Strike", 1));
             cardHand.Add(new CardState("guard", "Guard", 1));
             cardHand.Add(new CardState("focus", "Focus", 1));
@@ -114,6 +120,7 @@ namespace SoulBind.Grid.Presentation
             }
             foreach (var pathPosition in highlightedPath)
                 gridView.GetView(pathPosition)?.SetHighlighted(true, pathColor);
+            DrawPathArrow(highlightedPath);
             if (highlightedPath.Count > 1) StartCoroutine(MoveUnit(highlightedPath));
             selectedPosition = null;
         }
@@ -127,6 +134,7 @@ namespace SoulBind.Grid.Presentation
             foreach (var position in highlightedPath)
                 gridView.GetView(position)?.SetHighlighted(false, Color.clear);
             highlightedPath.Clear();
+            if (pathArrow != null) pathArrow.positionCount = 0;
         }
 
         private void CreatePrototypeUnit()
@@ -136,6 +144,7 @@ namespace SoulBind.Grid.Presentation
             unitObject.transform.SetParent(transform, false);
             unitObject.transform.localPosition = new Vector3(0f, 0.6f, 0f);
             activeUnit = unitObject.transform;
+            unitObject.GetComponent<Renderer>().material.color = new Color(0.15f, 0.55f, 0.95f);
         }
 
         private void CreatePrototypeEnemy()
@@ -185,6 +194,14 @@ namespace SoulBind.Grid.Presentation
             if (turnState.ActionPoints > 0) return;
             turnState.End();
             turnState.Begin(0, actionPointsPerTurn);
+        }
+
+        private void DrawPathArrow(IReadOnlyList<GridPosition> path)
+        {
+            if (pathArrow == null || path == null || path.Count < 2) return;
+            pathArrow.positionCount = path.Count;
+            for (var i = 0; i < path.Count; i++)
+                pathArrow.SetPosition(i, gridView.transform.TransformPoint(new Vector3(path[i].X, 0.16f, path[i].Y)));
         }
 
         #endregion

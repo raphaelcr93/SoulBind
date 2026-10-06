@@ -21,12 +21,9 @@ namespace SoulBind.Grid.Presentation
         private void OnGUI()
         {
             if (controller == null) return;
-            GUILayout.BeginArea(new Rect(16f, 16f, 300f, 140f), GUI.skin.box);
-            GUILayout.Label("SOUL BIND - GRID PROTOTYPE");
-            GUILayout.Label($"Action Points: {controller.ActionPoints}");
-            GUILayout.Label($"Player Health: {controller.PlayerHealth}");
-            GUILayout.Label($"Enemy Health: {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}");
-            GUILayout.Label($"Cards in Hand: {controller.CardsInHand}");
+            GUILayout.BeginArea(new Rect(18f, 18f, Screen.width - 36f, 92f), GUI.skin.box);
+            GUILayout.Label("SOUL BIND    |    TURN 1    |    PLAYER PHASE");
+            GUILayout.Label($"AP  {controller.ActionPoints}/3     PLAYER HP  {controller.PlayerHealth}/10     ENEMY HP  {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}     HAND  {controller.CardsInHand}");
             var outcome = controller.EnemyDefeated ? "Victory! Press R to restart." : controller.PlayerDefeated ? "Defeat! Press R to restart." : "Click to move/attack. Press C for a card. Press R to restart.";
             GUILayout.Label(outcome);
             GUILayout.EndArea();

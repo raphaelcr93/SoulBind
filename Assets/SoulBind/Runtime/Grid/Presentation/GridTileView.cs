@@ -35,7 +35,14 @@ namespace SoulBind.Grid.Presentation
         public void Refresh()
         {
             if (tile == null || tileRenderer == null) return;
-            baseColor = tile.IsWalkable ? Color.white : Color.gray;
+            if (!tile.IsWalkable)
+                baseColor = new Color(0.16f, 0.14f, 0.12f);
+            else if ((tile.Position.X + tile.Position.Y) % 5 == 0)
+                baseColor = new Color(0.24f, 0.38f, 0.22f);
+            else if (tile.Position.Y == 2 || tile.Position.Y == 6)
+                baseColor = new Color(0.30f, 0.46f, 0.25f);
+            else
+                baseColor = new Color(0.20f, 0.34f, 0.19f);
             tileRenderer.material.color = baseColor;
         }
 

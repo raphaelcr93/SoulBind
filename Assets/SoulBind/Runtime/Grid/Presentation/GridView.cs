@@ -70,7 +70,7 @@ namespace SoulBind.Grid.Presentation
                 var tileObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 tileObject.transform.SetParent(transform, false);
                 tileObject.transform.localPosition = new Vector3(x * tileSize, 0f, y * tileSize);
-                tileObject.transform.localScale = new Vector3(tileSize * 0.95f, 0.1f, tileSize * 0.95f);
+                tileObject.transform.localScale = new Vector3(tileSize * 0.92f, 0.12f, tileSize * 0.92f);
 
                 var view = tileObject.AddComponent<GridTileView>();
                 view.Bind(map.Get(new GridPosition(x, y)));
