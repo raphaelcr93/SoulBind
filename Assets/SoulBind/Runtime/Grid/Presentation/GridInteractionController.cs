@@ -139,12 +139,24 @@ namespace SoulBind.Grid.Presentation
 
         private void CreatePrototypeUnit()
         {
-            var unitObject = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            unitObject.name = "Prototype Unit";
+            var unitObject = new GameObject("Prototype Unit");
             unitObject.transform.SetParent(transform, false);
             unitObject.transform.localPosition = new Vector3(0f, 0.6f, 0f);
             activeUnit = unitObject.transform;
-            unitObject.GetComponent<Renderer>().material.color = new Color(0.15f, 0.55f, 0.95f);
+            var chestPrefab = Resources.Load<GameObject>("SoulBindUnits/ChestMonster");
+            if (chestPrefab != null)
+            {
+                var visual = Instantiate(chestPrefab, unitObject.transform);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                visual.transform.localScale = Vector3.one * 0.35f;
+            }
+            else
+            {
+                var fallback = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                fallback.transform.SetParent(unitObject.transform, false);
+                fallback.GetComponent<Renderer>().material.color = new Color(0.15f, 0.55f, 0.95f);
+            }
         }
 
         private void CreatePrototypeEnemy()
