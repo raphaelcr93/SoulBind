@@ -22,10 +22,12 @@ namespace SoulBind.Editor
             var cameraObject = new GameObject("Main Camera");
             cameraObject.tag = "MainCamera";
             var camera = cameraObject.AddComponent<Camera>();
-            camera.transform.position = new Vector3(4f, 10f, 4f);
-            camera.transform.rotation = Quaternion.Euler(55f, 0f, 0f);
+            camera.transform.position = new Vector3(3.5f, 12f, 3.5f);
+            camera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             camera.orthographic = true;
-            camera.orthographicSize = 6f;
+            camera.orthographicSize = 5.4f;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = new Color(0.12f, 0.20f, 0.34f);
             var lightObject = new GameObject("Directional Light");
             var light = lightObject.AddComponent<Light>();
             light.type = LightType.Directional;
