@@ -35,6 +35,7 @@ namespace SoulBind.Grid.Presentation
         private readonly CombatService combatService = new CombatService();
         private readonly CardHand cardHand = new CardHand();
         private LineRenderer pathArrow;
+        private GameObject pathArrowHead;
 
         public int ActionPoints => turnState.ActionPoints;
         public int PlayerHealth => playerState == null ? 0 : playerState.Health;
@@ -166,6 +167,7 @@ namespace SoulBind.Grid.Presentation
                 gridView.GetView(position)?.SetHighlighted(false, Color.clear);
             highlightedPath.Clear();
             if (pathArrow != null) pathArrow.positionCount = 0;
+            if (pathArrowHead != null) pathArrowHead.SetActive(false);
         }
 
         private void CreatePrototypeUnit()
@@ -258,6 +260,20 @@ namespace SoulBind.Grid.Presentation
             pathArrow.positionCount = path.Count;
             for (var i = 0; i < path.Count; i++)
                 pathArrow.SetPosition(i, gridView.transform.TransformPoint(new Vector3(path[i].X, 0.16f, path[i].Y)));
+            var headTexture = Resources.Load<Texture2D>("SoulBindArt/GridTilePathArrowHead");
+            if (headTexture == null) return;
+            if (pathArrowHead == null)
+            {
+                pathArrowHead = new GameObject("Path Arrow Head");
+                pathArrowHead.transform.SetParent(gridView.transform, false);
+                var spriteRenderer = pathArrowHead.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Sprite.Create(headTexture, new Rect(0f, 0f, headTexture.width, headTexture.height), new Vector2(0.5f, 0.5f), headTexture.width);
+            }
+            pathArrowHead.SetActive(true);
+            var finalPosition = path[path.Count - 1];
+            pathArrowHead.transform.localPosition = new Vector3(finalPosition.X, 0.22f, finalPosition.Y);
+            pathArrowHead.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            pathArrowHead.transform.localScale = Vector3.one * 0.012f;
         }
 
         private void TintEnemy(Color color)
