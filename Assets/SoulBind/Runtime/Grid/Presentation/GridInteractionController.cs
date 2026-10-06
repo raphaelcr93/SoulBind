@@ -26,6 +26,7 @@ namespace SoulBind.Grid.Presentation
         #region State
 
         private readonly List<GridPosition> highlightedPath = new List<GridPosition>();
+        private readonly List<GridPosition> highlightedAttackRange = new List<GridPosition>();
         private GridPosition? selectedPosition;
         private IGridPathfinder pathfinder = new DijkstraGridPathfinder();
         private Transform activeUnit;
@@ -139,6 +140,22 @@ namespace SoulBind.Grid.Presentation
             {
                 selectedPosition = position;
                 gridView.GetView(position).SetHighlighted(true, selectedColor);
+                var playerPosition = new GridPosition(Mathf.RoundToInt(activeUnit.localPosition.x), Mathf.RoundToInt(activeUnit.localPosition.z));
+                if (position == playerPosition)
+                {
+                    for (var x = 0; x < gridView.Width; x++)
+                    for (var y = 0; y < gridView.Height; y++)
+                    {
+                        var candidate = new GridPosition(x, y);
+                        var distance = Mathf.Abs(candidate.X - playerPosition.X) + Mathf.Abs(candidate.Y - playerPosition.Y);
+                        if (distance > 0 && distance <= attackRange && gridView.Map.Get(candidate).IsWalkable)
+                        {
+                            highlightedAttackRange.Add(candidate);
+                            gridView.GetView(candidate)?.SetHighlighted(true, new Color(0.85f, 0.25f, 0.25f));
+                        }
+                    }
+                    LastActionMessage = "Attack range shown. Select an enemy or destination.";
+                }
                 return;
             }
 
@@ -168,6 +185,9 @@ namespace SoulBind.Grid.Presentation
             foreach (var position in highlightedPath)
                 gridView.GetView(position)?.SetHighlighted(false, Color.clear);
             highlightedPath.Clear();
+            foreach (var position in highlightedAttackRange)
+                gridView.GetView(position)?.SetHighlighted(false, Color.clear);
+            highlightedAttackRange.Clear();
             if (pathArrow != null) pathArrow.positionCount = 0;
             if (pathArrowHead != null) pathArrowHead.SetActive(false);
         }

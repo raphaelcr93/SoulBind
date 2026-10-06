@@ -30,6 +30,8 @@ namespace SoulBind.Grid.Presentation
         private GridMap map;
 
         public GridMap Map => map;
+        public int Width => width;
+        public int Height => height;
 
         public GridTileView GetView(GridPosition position)
         {
