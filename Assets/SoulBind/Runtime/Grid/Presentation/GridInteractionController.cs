@@ -260,11 +260,13 @@ namespace SoulBind.Grid.Presentation
             }
             enemyUnit.gameObject.SetActive(true);
             TintEnemy(Color.magenta);
+            activeUnit.localPosition = new Vector3(0f, 0.6f, 0f);
             playerState.Reset();
             enemyState.Reset();
             turnState.Begin(0, actionPointsPerTurn);
             selectedPosition = null;
             ClearPreview();
+            LastActionMessage = "Battle reset. Select your unit to begin.";
         }
 
         private System.Collections.IEnumerator MoveUnit(IReadOnlyList<GridPosition> path)
