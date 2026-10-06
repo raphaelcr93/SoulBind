@@ -36,6 +36,15 @@ namespace SoulBind.Tests.Turn
             Assert.That(state.IsActive, Is.False);
         }
 
+        [Test]
+        public void AddingActionPointsRestoresTacticalBudget()
+        {
+            var state = new TurnState();
+            state.Begin(0, 1);
+            state.AddActionPoints(2);
+            Assert.That(state.ActionPoints, Is.EqualTo(3));
+        }
+
         #endregion
     }
 }
