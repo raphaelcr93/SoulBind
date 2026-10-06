@@ -9,6 +9,10 @@ namespace SoulBind.Grid.Presentation
 
         [SerializeField] private GridInteractionController controller;
         private Texture2D cardBackground;
+        private GUIStyle titleStyle;
+        private GUIStyle cardTitleStyle;
+        private GUIStyle cardBodyStyle;
+        private GUIStyle cardButtonStyle;
 
         #endregion
 
@@ -18,6 +22,10 @@ namespace SoulBind.Grid.Presentation
         {
             if (controller == null) controller = FindObjectOfType<GridInteractionController>();
             cardBackground = Resources.Load<Texture2D>("SoulBindArt/CardBackgroundTexture");
+            titleStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = 16, normal = { textColor = Color.white } };
+            cardTitleStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold, fontSize = 15, normal = { textColor = new Color(0.15f, 0.08f, 0.04f) } };
+            cardBodyStyle = new GUIStyle(GUI.skin.label) { fontSize = 12, wordWrap = true, normal = { textColor = new Color(0.12f, 0.08f, 0.05f) } };
+            cardButtonStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold, fontSize = 11 };
         }
 
         private void OnGUI()
@@ -27,7 +35,7 @@ namespace SoulBind.Grid.Presentation
             if (!controller.EnemyDefeated)
                 DrawUnitHealthBar(controller.EnemyTransform, controller.EnemyHealth, 6, new Color(1f, 0.25f, 0.35f));
             GUILayout.BeginArea(new Rect(18f, 18f, Screen.width - 36f, 92f), GUI.skin.box);
-            GUILayout.Label($"SOUL BIND    |    TURN {controller.Round}    |    PLAYER PHASE");
+            GUILayout.Label($"SOUL BIND    |    TURN {controller.Round}    |    PLAYER PHASE", titleStyle);
             GUILayout.Label($"AP  {controller.ActionPoints}/3     PLAYER HP  {controller.PlayerHealth}/10     ENEMY HP  {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}     HAND  {controller.CardsInHand}");
             var outcome = controller.EnemyDefeated ? "Victory! Press R to restart." : controller.PlayerDefeated ? "Defeat! Press R to restart." : "Click to move/attack. Press C for a card. Press R to restart.";
             GUILayout.Label(outcome);
@@ -48,10 +56,10 @@ namespace SoulBind.Grid.Presentation
                 var cardRect = new Rect(24f + i * (cardWidth + 14f), handY, cardWidth, cardHeight);
                 if (cardBackground != null) GUI.DrawTexture(cardRect, cardBackground, ScaleMode.StretchToFill);
                 else GUI.Box(cardRect, GUIContent.none);
-                GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 18f, cardWidth - 24f, 28f), i == 0 ? "STRIKE" : i == 1 ? "GUARD" : "FOCUS");
-                GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 64f, cardWidth - 24f, 64f), i == 0 ? "Deal damage to an enemy." : i == 1 ? "Prepare for the next hit." : "Restore tactical momentum.");
+                GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 18f, cardWidth - 24f, 28f), i == 0 ? "STRIKE" : i == 1 ? "GUARD" : "FOCUS", cardTitleStyle);
+                GUI.Label(new Rect(cardRect.x + 12f, cardRect.y + 64f, cardWidth - 24f, 64f), i == 0 ? "Deal damage to an enemy." : i == 1 ? "Prepare for the next hit." : "Restore tactical momentum.", cardBodyStyle);
                 GUI.Label(new Rect(cardRect.x + 12f, cardRect.yMax - 34f, cardWidth - 24f, 22f), "COST 1 AP");
-                if (GUI.Button(new Rect(cardRect.x + 12f, cardRect.yMax - 62f, cardWidth - 24f, 24f), "PLAY CARD"))
+                if (GUI.Button(new Rect(cardRect.x + 12f, cardRect.yMax - 62f, cardWidth - 24f, 24f), "PLAY CARD", cardButtonStyle))
                     controller.TryPlayCard(i);
             }
         }
