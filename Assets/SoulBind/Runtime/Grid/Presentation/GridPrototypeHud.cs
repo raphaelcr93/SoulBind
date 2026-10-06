@@ -28,6 +28,7 @@ namespace SoulBind.Grid.Presentation
             GUILayout.Label($"AP  {controller.ActionPoints}/3     PLAYER HP  {controller.PlayerHealth}/10     ENEMY HP  {(controller.EnemyDefeated ? "DEFEATED" : controller.EnemyHealth.ToString())}     HAND  {controller.CardsInHand}");
             var outcome = controller.EnemyDefeated ? "Victory! Press R to restart." : controller.PlayerDefeated ? "Defeat! Press R to restart." : "Click to move/attack. Press C for a card. Press R to restart.";
             GUILayout.Label(outcome);
+            GUILayout.Label(controller.LastActionMessage);
             GUILayout.EndArea();
 
             var cardWidth = 150f;

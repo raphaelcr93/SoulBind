@@ -42,13 +42,19 @@ namespace SoulBind.Grid.Presentation
         public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
         public bool PlayerDefeated => playerState != null && playerState.IsDefeated;
         public int CardsInHand => cardHand.Cards.Count;
+        public string LastActionMessage { get; private set; } = "Select a tile to move.";
         private bool isMoving;
         private TurnState turnState = new TurnState();
 
         public bool TryPlayCard(int index)
         {
             if (PlayerDefeated || EnemyDefeated || isMoving) return false;
-            if (!cardHand.TryPlay(index, turnState)) return false;
+            if (!cardHand.TryPlay(index, turnState))
+            {
+                LastActionMessage = "Not enough action points for that card.";
+                return false;
+            }
+            LastActionMessage = "Card played. Choose your next action.";
             EndTurnIfSpent();
             return true;
         }
@@ -100,11 +106,16 @@ namespace SoulBind.Grid.Presentation
                 if (distance <= attackRange && combatService.TryAttack(playerState, enemyState, turnState))
                 {
                     TintEnemy(Color.red);
+                    LastActionMessage = enemyState.IsDefeated ? "Enemy defeated!" : "Attack landed. The enemy counterattacks.";
                     if (enemyState.IsDefeated)
                         Destroy(enemyUnit.gameObject);
                     else
                         playerState.ReceiveDamage(enemyState.Attack);
                     EndTurnIfSpent();
+                }
+                else if (distance > attackRange)
+                {
+                    LastActionMessage = $"Target out of range ({distance}/{attackRange}).";
                 }
                 selectedPosition = null;
                 ClearPreview();
@@ -122,6 +133,7 @@ namespace SoulBind.Grid.Presentation
             highlightedPath.AddRange(pathfinder.FindPath(gridView.Map, selectedPosition.Value, position));
             if (highlightedPath.Count < 2 || !turnState.TrySpend(highlightedPath.Count - 1))
             {
+                LastActionMessage = "That route costs more action points than remain.";
                 highlightedPath.Clear();
                 selectedPosition = null;
                 return;
@@ -131,6 +143,7 @@ namespace SoulBind.Grid.Presentation
             DrawPathArrow(highlightedPath);
             if (highlightedPath.Count > 1) StartCoroutine(MoveUnit(highlightedPath));
             selectedPosition = null;
+            LastActionMessage = "Moving along the highlighted route.";
         }
 
         #endregion
@@ -226,6 +239,7 @@ namespace SoulBind.Grid.Presentation
             if (turnState.ActionPoints > 0) return;
             turnState.End();
             turnState.Begin(0, actionPointsPerTurn);
+            LastActionMessage = "New turn. Your action points are restored.";
         }
 
         private void DrawPathArrow(IReadOnlyList<GridPosition> path)
