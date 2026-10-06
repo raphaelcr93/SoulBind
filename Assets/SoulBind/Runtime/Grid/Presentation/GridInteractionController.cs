@@ -43,6 +43,8 @@ namespace SoulBind.Grid.Presentation
         public bool EnemyDefeated => enemyState != null && enemyState.IsDefeated;
         public bool PlayerDefeated => playerState != null && playerState.IsDefeated;
         public int CardsInHand => cardHand.Cards.Count;
+        public Transform PlayerTransform => activeUnit;
+        public Transform EnemyTransform => enemyUnit;
         public string LastActionMessage { get; private set; } = "Select a tile to move.";
 
         public void EndTurnFromUi()
