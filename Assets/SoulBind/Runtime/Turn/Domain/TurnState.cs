@@ -47,6 +47,12 @@ namespace SoulBind.Turn
             return true;
         }
 
+        public void AddActionPoints(int amount)
+        {
+            if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
+            ActionPoints += amount;
+        }
+
         #endregion
     }
 }

@@ -41,6 +41,14 @@ namespace SoulBind.Units
             return applied;
         }
 
+        public int RestoreHealth(int amount)
+        {
+            if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
+            var restored = Math.Min(amount, MaxHealth - Health);
+            Health += restored;
+            return restored;
+        }
+
         public void Reset() => Health = MaxHealth;
 
         #endregion

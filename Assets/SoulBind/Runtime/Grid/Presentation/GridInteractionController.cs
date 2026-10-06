@@ -69,7 +69,22 @@ namespace SoulBind.Grid.Presentation
                 LastActionMessage = "Not enough action points for that card.";
                 return false;
             }
-            LastActionMessage = "Card played. Choose your next action.";
+            switch (index)
+            {
+                case 0:
+                    enemyState.ReceiveDamage(2);
+                    LastActionMessage = enemyState.IsDefeated ? "Strike defeated the enemy!" : "Strike dealt 2 damage.";
+                    if (enemyState.IsDefeated && enemyUnit != null) Destroy(enemyUnit.gameObject);
+                    break;
+                case 1:
+                    var restored = playerState.RestoreHealth(3);
+                    LastActionMessage = $"Guard restored {restored} health.";
+                    break;
+                case 2:
+                    turnState.AddActionPoints(2);
+                    LastActionMessage = "Focus restored 2 action points.";
+                    break;
+            }
             EndTurnIfSpent();
             return true;
         }
