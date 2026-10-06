@@ -141,7 +141,10 @@ namespace SoulBind.Grid.Presentation
                     if (enemyState.IsDefeated)
                         Destroy(enemyUnit.gameObject);
                     else
+                    {
                         playerState.ReceiveDamage(enemyState.Attack);
+                        StartCoroutine(FlashPlayer());
+                    }
                     EndTurnIfSpent();
                 }
                 else if (distance > attackRange)
@@ -332,6 +335,21 @@ namespace SoulBind.Grid.Presentation
             yield return new WaitForSeconds(0.18f);
             if (enemyUnit != null && enemyUnit.gameObject.activeInHierarchy)
                 TintEnemy(Color.magenta);
+        }
+
+        private System.Collections.IEnumerator FlashPlayer()
+        {
+            TintPlayer(Color.red);
+            yield return new WaitForSeconds(0.18f);
+            if (activeUnit != null && activeUnit.gameObject.activeInHierarchy)
+                TintPlayer(Color.white);
+        }
+
+        private void TintPlayer(Color color)
+        {
+            if (activeUnit == null) return;
+            foreach (var renderer in activeUnit.GetComponentsInChildren<Renderer>())
+                renderer.material.color = color;
         }
 
         #endregion
