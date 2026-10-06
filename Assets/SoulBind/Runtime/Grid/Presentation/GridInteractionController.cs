@@ -43,6 +43,16 @@ namespace SoulBind.Grid.Presentation
         public bool PlayerDefeated => playerState != null && playerState.IsDefeated;
         public int CardsInHand => cardHand.Cards.Count;
         public string LastActionMessage { get; private set; } = "Select a tile to move.";
+
+        public void EndTurnFromUi()
+        {
+            if (PlayerDefeated || EnemyDefeated || isMoving) return;
+            turnState.End();
+            turnState.Begin(0, actionPointsPerTurn);
+            LastActionMessage = "Turn ended. Action points restored.";
+            ClearPreview();
+            selectedPosition = null;
+        }
         private bool isMoving;
         private TurnState turnState = new TurnState();
 

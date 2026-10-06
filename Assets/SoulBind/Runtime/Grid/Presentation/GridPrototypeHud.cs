@@ -31,6 +31,12 @@ namespace SoulBind.Grid.Presentation
             GUILayout.Label(controller.LastActionMessage);
             GUILayout.EndArea();
 
+            var controlY = 118f;
+            if (GUI.Button(new Rect(Screen.width - 190f, controlY, 170f, 34f), "END TURN"))
+                controller.EndTurnFromUi();
+            if (GUI.Button(new Rect(Screen.width - 190f, controlY + 42f, 170f, 30f), "RESET BATTLE"))
+                SendMessage("ResetPrototype", SendMessageOptions.DontRequireReceiver);
+
             var cardWidth = 150f;
             var cardHeight = 190f;
             var handY = Screen.height - cardHeight - 24f;
