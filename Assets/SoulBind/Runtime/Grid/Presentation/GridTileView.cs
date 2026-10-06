@@ -12,6 +12,7 @@ namespace SoulBind.Grid.Presentation
         private GridTile tile;
         private Color baseColor = Color.white;
         private Texture2D highlightTexture;
+        private Texture2D borderTexture;
 
         #endregion
 
@@ -21,6 +22,7 @@ namespace SoulBind.Grid.Presentation
         {
             tileRenderer = GetComponent<Renderer>();
             highlightTexture = Resources.Load<Texture2D>("SoulBindArt/GridTileHighlight");
+            borderTexture = Resources.Load<Texture2D>("SoulBindArt/Border");
         }
 
         #endregion
@@ -46,6 +48,7 @@ namespace SoulBind.Grid.Presentation
             else
                 baseColor = new Color(0.20f, 0.34f, 0.19f);
             tileRenderer.material.color = baseColor;
+            tileRenderer.material.mainTexture = borderTexture;
         }
 
         public void SetHighlighted(bool highlighted, Color highlightColor)
